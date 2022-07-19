@@ -10,3 +10,4 @@
 
 ![](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-2549c7fd-0cc4-40f0-aa5e-477fd44b9738/92830a97-4e63-47fd-8fcf-59d0bcdc2979.gif)
 
+<!-- 发布时需要 将  components 文件夹复制到 release/yichan-movable-area 下，然后 将 yichan-movable-area 打包 上传即可 -->
