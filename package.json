@@ -1,0 +1,9 @@
+{
+    "id": "yichan-movable-area",
+    "name": "可拖拽进度条、滑动条、评分条、movable-area（增强版）",
+    "version": "1.0.1",
+    "description": "可拖拽进度条、滑动条、评分条、movable-area（增强版）原有插件基础上解决 使用时报错问题",
+    "keywords": [
+        "可拖拽进度条,滑动条,评分条,movable-area"
+    ]
+}
