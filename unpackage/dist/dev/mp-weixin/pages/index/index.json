@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "uni-app",
-  "usingComponents": {
-    "myltx-movable-area": "/components/myltx-movable-area/myltx-movable-area"
-  }
-}

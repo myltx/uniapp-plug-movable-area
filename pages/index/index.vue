@@ -3,7 +3,7 @@
 		<view class="text-area">
 			<view class="title">{{title}}</view>
 			<view class="sub-title">默认</view>
-			<myltx-movable-area @change="onChange" />
+			<yichan-movable-area @change="onChange" />
 			<text class="text-container">
 				<text class="text">max: 10 </text>
 				<text class="text">min: 0 </text>
@@ -11,7 +11,7 @@
 			</text>
 			<div class="placeholder"></div>
 			<view class="sub-title">自定义 max min </view>
-			<myltx-movable-area max="100" min="10" @change="onChange1" />
+			<yichan-movable-area max="100" min="10" @change="onChange1" />
 			<text class="text-container">
 				<text class="text">max: 100 </text>
 				<text class="text">min: 10 </text>
@@ -23,10 +23,10 @@
 </template>
 
 <script>
-	import MyltxMovableArea from '../../components/myltx-movable-area/myltx-movable-area.vue';
+	import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movable-area.vue';
 	export default {
 		components: {
-			MyltxMovableArea,
+			YiChanMovableArea,
 		},
 		data() {
 			return {
