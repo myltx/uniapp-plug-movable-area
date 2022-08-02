@@ -50,7 +50,8 @@
 				this.x = e.detail.x
 				this.score = parseInt(this.x / this.slideBarWidth * this.maxScore)
 				this.$emit('change', this.score)
-			}
+			},
+			onClick() {}
 		}
 	}
 </script>
