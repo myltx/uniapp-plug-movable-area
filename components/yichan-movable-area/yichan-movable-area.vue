@@ -4,7 +4,7 @@
 			<view class="flex"></view>
 			<movable-area class="sliderBar" :style="{width: (100)+'%'}">
 				<view class="gone" :style="{width: x +'px'}"></view>
-				<movable-view class="slider" direction="all" @change="onChange">
+				<movable-view class="slider" :x="oldx" direction="all" @change="onChange">
 					<text>{{ score }}</text>
 				</movable-view>
 			</movable-area>
@@ -32,6 +32,7 @@
 				maxScore: this.max ? this.max : 10,
 				x: 0,
 				y: 0,
+				oldx: 0,
 				score: this.min ? this.min : 0,
 			};
 		},
@@ -51,7 +52,9 @@
 				this.score = parseInt(this.x / this.slideBarWidth * this.maxScore)
 				this.$emit('change', this.score)
 			},
-			onClick() {}
+			onClick(e) {
+				this.oldx = e.detail.x
+			}
 		}
 	}
 </script>
