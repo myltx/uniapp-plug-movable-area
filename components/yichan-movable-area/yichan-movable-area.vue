@@ -2,9 +2,9 @@
 	<view>
 		<view class="slider-container">
 			<view class="flex"></view>
-			<movable-area class="sliderBar" :style="{width: (100)+'%'}">
+			<movable-area class="sliderBar" :style="{width: (100)+'%'}" :damping="10">
 				<view class="gone" :style="{width: x +'px'}"></view>
-				<movable-view class="slider" :x="oldx" direction="all" @change="onChange">
+				<movable-view class="slider" direction="all" :x="x" @change="onChange">
 					<text>{{ score }}</text>
 				</movable-view>
 			</movable-area>
@@ -23,6 +23,10 @@
 			min: {
 				type: Number,
 				default: 0
+			},
+			defaultValue: {
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
@@ -32,28 +36,35 @@
 				maxScore: this.max ? this.max : 10,
 				x: 0,
 				y: 0,
-				oldx: 0,
-				score: this.min ? this.min : 0,
+				score: 0,
 			};
 		},
 		mounted() {
 			var that = this;
+			console.log(this.defaultValue)
 			// 解决报错问题
 			let el = uni.createSelectorQuery().in(this)
 			this.$nextTick(() => {
 				el.select(".slider-container").boundingClientRect(function(res) {
 					that.slideBarWidth = res.width
+					// 根据 defaultValue 计算出初始位置和分数
+					if (that.defaultValue) {
+						that.score = that.defaultValue || 0
+						console.log(that.defaultValue / that.maxScore * that.slideBarWidth)
+						that.x = that.defaultValue / that.maxScore * that.slideBarWidth
+						that.score = that.defaultValue
+					}
 				}).exec();
 			})
 		},
 		methods: {
 			onChange: function(e, i) {
+				// 这里是为了防止设置默认值的时候重复触发
+				if(!e.detail.source) return
+				console.log(e.detail.x, this.slideBarWidth)
 				this.x = e.detail.x
 				this.score = parseInt(this.x / this.slideBarWidth * this.maxScore)
 				this.$emit('change', this.score)
-			},
-			onClick(e) {
-				this.oldx = e.detail.x
 			}
 		}
 	}

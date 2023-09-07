@@ -1,13 +1,38 @@
 ## 可拖拽进度条、滑动条、评分条、movable-area
 
-
 ### 简介
 
 - 使用 [movable-area](https://developers.weixin.qq.com/miniprogram/dev/component/movable-area.html) 实现可拖拽进度条、滑动条、评分条
 
 - 具体使用可以跳转至 [uniapp插件地址](https://ext.dcloud.net.cn/plugin?id=6274) 查看
 
+### Example
+```
+<template>
+	<view>
+		<yichan-movable-area />
+	</view>
+</template>
+<script>
+	import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movable-area.vue';
+	export default {
+		components: {
+			YiChanMovableArea
+		},
+	}
+</script>
 
-![](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-2549c7fd-0cc4-40f0-aa5e-477fd44b9738/92830a97-4e63-47fd-8fcf-59d0bcdc2979.gif)
+```
+### Props
+|  属性名  | 类型 | 默认值 | 说明 |
+|  :----:  | :----:  | :----: | :----: |
+| min  | Number | 最小值 | 0 |
+| max  | Number | 最大值 | 0 |
+| defaultValue  | Number | 默认值 | 0 |
+### Events
+|  函数名  | 说明 | 返回值 |
+| :----:  | :----: | :----: |
+| change  | 拖动时触发 | 返回当前选择的数值 |
+
 
 <!-- 发布时需要 将  components 文件夹复制到 release/yichan-movable-area 下，然后 将 yichan-movable-area 打包 上传即可 -->

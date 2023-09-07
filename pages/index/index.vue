@@ -17,13 +17,30 @@
 				<text class="text">min: 10 </text>
 				<text class="text">score: {{ score1 }}</text>
 			</text>
+			<div class="placeholder"></div>
+			<view class="sub-title">默认值设置</view>
+			<yichan-movable-area max="100" min="10" :defaultValue="30" @change="onChange1" />
+			<text class="text-container">
+				<text class="text">defaultValue: 30 </text>
+				<text class="text">score: {{ score1 }}</text>
+			</text>
+			<div class="placeholder"></div>
+			<view class="sub-title">多个循环</view>
+			<view v-for="(score, index) in list" :key="index">				
+				<yichan-movable-area :max="score.max" :min="score.min" :defaultValue="score.score" @change="(score) => {
+					onChangeInd(score, index)
+				}" />
+				<view style="margin:0 0 30px 0">
+					我是第{{index}}个,当前值：{{score.score}}
+				</view>
+			</view>
 		</view>
 
 	</view>
 </template>
 
 <script>
-	import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movable-area.vue';
+import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movable-area.vue';
 	export default {
 		components: {
 			YiChanMovableArea,
@@ -33,6 +50,15 @@
 				title: '可拖拽进度条、滑动条、评分条示例',
 				score: 0,
 				score1: 0,
+				list: [{
+					max: 10,
+					min:0,
+					score: 10
+				},{
+					max: 50,
+					min:0,
+					score: 30
+				},]
 			}
 		},
 		onLoad() {
@@ -46,6 +72,10 @@
 			onChange1(score) {
 				console.log(score)
 				this.score1 = score
+			},
+			onChangeInd(score, ind) {
+				// console.log(score, ind)
+				this.list[ind].score = score
 			}
 		}
 	}
@@ -68,7 +98,7 @@
 		}
 
 		.sub-title {
-			margin-bottom: 80rpx;
+			margin-bottom: 60rpx;
 			font-size: 36rpx;
 			color: #8f8f94;
 		}
