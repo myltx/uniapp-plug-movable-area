@@ -18,6 +18,14 @@
 				<text class="text">score: {{ score1 }}</text>
 			</text>
 			<div class="placeholder"></div>
+			<view class="sub-title">动态自定义 max min </view>
+			<yichan-movable-area :max="max" :min="min" @change="onChange1" />
+			<text class="text-container">
+				<text class="text">max: {{ max }} </text>
+				<text class="text">min: {{ min }} </text>
+				<text class="text">score: {{ score1 }}</text>
+			</text>
+			<div class="placeholder"></div>
 			<view class="sub-title">默认值设置</view>
 			<yichan-movable-area max="100" min="10" :defaultValue="30" @change="onChange1" />
 			<text class="text-container">
@@ -58,7 +66,9 @@ import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movab
 					max: 50,
 					min:0,
 					score: 30
-				},]
+				},],
+				max: 50,
+				min:20,
 			}
 		},
 		onLoad() {
