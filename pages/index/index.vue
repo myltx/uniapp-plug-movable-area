@@ -42,6 +42,15 @@
 					我是第{{index}}个,当前值：{{score.score}}
 				</view>
 			</view>
+			<div class="placeholder"></div>
+			<view class="sub-title">按钮控制</view>
+			<yichan-movable-area ref="changeScoreRef" @change="onChange2" :disabled="true" />
+			<text class="text-container">
+				<text class="text">score: {{ score2 }}</text>
+			</text>
+			<button type="primary" @click="addScore" style="margin-bottom: 20rpx;">添加</button>
+			<button @click="decreaseScore">减少</button>
+			<div class="placeholder"></div>
 		</view>
 
 	</view>
@@ -58,6 +67,7 @@ import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movab
 				title: '可拖拽进度条、滑动条、评分条示例',
 				score: 0,
 				score1: 0,
+				score2: 0,
 				list: [{
 					max: 10,
 					min:0,
@@ -86,6 +96,18 @@ import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movab
 			onChangeInd(score, ind) {
 				// console.log(score, ind)
 				this.list[ind].score = score
+			},
+			onChange2() {
+				console.log(score)
+				this.score2 = score
+			},
+			addScore() {
+				this.score2++
+				this.$refs.changeScoreRef.updateScore(this.score2)
+			},
+			decreaseScore() {
+				this.score2--
+				this.$refs.changeScoreRef.updateScore(this.score2)
 			}
 		}
 	}
@@ -96,7 +118,6 @@ import YiChanMovableArea from '../../components/yichan-movable-area/yichan-movab
 		width: 80%;
 		margin: 0 auto;
 		padding: 10rpx 30rpx;
-
 		.text-container {
 			.text {
 				margin-right: 20px;
