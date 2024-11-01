@@ -39,3 +39,7 @@
 
 
 <!-- 发布时需要 将  components 文件夹复制到 release/yichan-movable-area 下，然后 将 yichan-movable-area 打包 上传即可 -->
+
+![](./3332dbb0-1f85-11ec-8ff2-07559bdc63f6_0.png)
+![](./Snipaste_2024-11-01_11-23-07.png)
+![](./d26vf-74yk1.gif)
