@@ -16,6 +16,7 @@
           class="slider"
           direction="all"
           :x="x"
+          @touchend="onTouchEnd"
           @change="onChange"
           :disabled="disabled">
           <text>{{ score }}</text>
@@ -48,6 +49,10 @@ export default {
       type: Number,
       default: 0,
     },
+    step: {
+      type: Number,
+      default: 1,
+    },
   },
   data() {
     return {
@@ -57,7 +62,31 @@ export default {
       x: 0,
       y: 0,
       score: this.min || 0,
+      isDragging: false, // 用来标记是否正在拖动
+      updateX: 0, // 用来记录拖动过程中的 x 值
+      useStep: this.step,
     };
+  },
+  watch: {
+    step: {
+      immediate: true,
+      handler(newStep) {
+        if (newStep <= 0 || !Number.isInteger(newStep)) {
+          console.warn(
+            `[yichan-movable-area] Invalid "step" value: ${newStep}. "step" must be a positive integer. It has been reset to 1.`
+          );
+          // 自动恢复为默认值
+          this.useStep = 1;
+        }
+        // 如果 step 大于 max，限制 step 为 max
+        if (newStep > this.maxScore) {
+          console.warn(
+            `[yichan-movable-area] Invalid "step" value: "step" value cannot be greater than "max". It has been reset to ${this.maxScore}.`
+          );
+          this.useStep = this.maxScore;
+        }
+      },
+    },
   },
   mounted() {
     var that = this;
@@ -68,13 +97,38 @@ export default {
         .boundingClientRect(function (res) {
           that.slideBarWidth = res.width;
           // 根据 defaultValue 计算出初始位置和分数
+          console.log(that.defaultValue, "this.defaultValue");
+          let useDefaultValue = that.defaultValue;
           if (that.defaultValue) {
-            that.score = that.defaultValue || that.minScore;
+            // 如果默认值大于 最大值，则限制为最大值
+            // 这里根据 最大最小值限制默认值大小
+            if (that.defaultValue > that.maxScore) {
+              useDefaultValue = that.maxScore;
+              console.warn(
+                ` [yichan-movable-area] Invalid "defaultValue" value: ${that.defaultValue}."defaultValue" must be less than or equal to "max". It has been reset to ${that.maxScore}.`
+              );
+            } else if (that.defaultValue < that.minScore) {
+              useDefaultValue = that.minScore;
+              console.warn(
+                `[yichan-movable-area] Invalid "defaultValue" value: ${that.defaultValue}."defaultValue" must be greater than or equal to "min". It has been reset to ${that.minScore}.`
+              );
+            } else {
+              useDefaultValue = that.defaultValue;
+            }
+            that.score = useDefaultValue || that.minScore;
+            // 如果 step 大于 0，则将分数限制为 step 的倍数
+            if (that.step > 0) {
+              that.score = Math.round(that.score / that.step) * that.step;
+              useDefaultValue = that.score;
+              console.warn(
+                `[yichan-movable-area] Invalid "defaultValue" value: ${that.defaultValue}."defaultValue" must be a multiple of "step". It has been reset to ${that.score}.`
+              );
+            }
             that.x =
-              ((that.defaultValue - that.minScore) /
+              ((useDefaultValue - that.minScore) /
                 (that.maxScore - that.minScore)) *
               that.slideBarWidth;
-            that.score = that.defaultValue;
+            that.score = useDefaultValue;
           }
         })
         .exec();
@@ -85,6 +139,7 @@ export default {
       // 这里是为了防止设置默认值的时候重复触发
       if (!e.detail.source) return;
       let newX = e.detail.x;
+      this.isDragging = true; // 开始拖动时设置为 true
       if (newX < 0) {
         newX = 0;
       } else if (newX > this.slideBarWidth) {
@@ -108,11 +163,45 @@ export default {
           this.slideBarWidth;
       }
       this.x = newX;
-      this.score = parseInt(
-        (this.x / this.slideBarWidth) * (this.maxScore - this.minScore) +
-          this.minScore
-      );
-      this.$emit("change", this.score);
+      this.updateX = newX;
+
+      if (this.useStep == 1) {
+        this.score = parseInt(
+          (this.x / this.slideBarWidth) * (this.maxScore - this.minScore) +
+            this.minScore
+        );
+        this.$emit("change", this.score);
+      }
+    },
+    onTouchEnd() {
+      this.isDragging = false;
+      if (this.useStep > 1) {
+        // 计算原始的分数
+        const rawScore =
+          (this.updateX / this.slideBarWidth) *
+            (this.maxScore - this.minScore) +
+          this.minScore;
+
+        // 计算最接近的 `useStep` 值，确保跳到最近的合法位置
+        const steppedScore =
+          Math.round((rawScore - this.minScore) / this.useStep) * this.useStep +
+          this.minScore;
+        // 确保 score 在 minScore 和 maxScore 之间
+        this.score = Math.min(
+          Math.max(steppedScore, this.minScore),
+          this.maxScore
+        );
+
+        // 计算滑块新位置，使滑块对准正确的 `useStep`
+        setTimeout(() => {
+          this.x =
+            ((this.score - this.minScore) / (this.maxScore - this.minScore)) *
+            this.slideBarWidth;
+        }, 50);
+
+        // 触发 change 事件
+        this.$emit("change", this.score);
+      }
     },
     updateScore(score) {
       if (!["string", "number"].includes(typeof score)) {
@@ -121,11 +210,11 @@ export default {
       if (typeof score === "string") {
         score = score * 1;
       }
-      if(score > this.maxScore) {
-	throw new Error("score不能大于maxScore");
+      if (score > this.maxScore) {
+        throw new Error("score不能大于maxScore");
       }
-      if(score < this.minScore) {
-	throw new Error("score不能小于minScore");
+      if (score < this.minScore) {
+        throw new Error("score不能小于minScore");
       }
       this.x =
         ((score - this.minScore) / (this.maxScore - this.minScore)) *

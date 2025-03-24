@@ -2,14 +2,14 @@
   <view class="content">
     <view class="text-area">
       <view class="title">{{ title }}</view>
-        <view class="sub-title">默认</view>
-        <yichan-movable-area @change="onChange" />
-        <text class="text-container">
-          <text class="text">max: 10 </text>
-          <text class="text">min: 0 </text>
-          <text class="text">score: {{ score }}</text>
-        </text>
-        <div class="placeholder"></div>
+      <view class="sub-title">默认</view>
+      <yichan-movable-area @change="onChange" />
+      <text class="text-container">
+        <text class="text">max: 10 </text>
+        <text class="text">min: 0 </text>
+        <text class="text">score: {{ score }}</text>
+      </text>
+      <div class="placeholder"></div>
       <view class="sub-title">自定义 max min </view>
       <yichan-movable-area max="100" min="10" @change="onChange1" />
       <text class="text-container">
@@ -53,7 +53,11 @@
         </view>
       </view>
       <view class="sub-title">外部更新score</view>
-      <yichan-movable-area ref="changeScoreRef" @change="onChange2" :disabled="true" :delay="0.42" />
+      <yichan-movable-area
+        ref="changeScoreRef"
+        @change="onChange2"
+        :disabled="true"
+        :delay="0.42" />
       <text class="text-container">
         <text class="text">score: {{ score2 }}</text>
       </text>
@@ -62,6 +66,19 @@
       </button>
       <button @click="decreaseScore">减少</button>
       <div class="placeholder"></div>
+
+      <view class="sub-title">添加 step 步进器</view>
+      <yichan-movable-area
+        ref="changeScoreRef1"
+        @change="onChange3"
+        :defaultValue="3"
+        :step="5" />
+      <text class="text-container">
+        <text class="text">score: {{ score3 }}</text>
+      </text>
+      <div class="placeholder"></div>
+
+      <button type="default" @click="handleClick">release</button>
     </view>
   </view>
 </template>
@@ -78,6 +95,7 @@ export default {
       score: 0,
       score1: 0,
       score2: 0,
+      score3: 0,
       list: [
         {
           max: 10,
@@ -96,6 +114,11 @@ export default {
   },
   onLoad() {},
   methods: {
+    handleClick() {
+      uni.redirectTo({
+        url: "/pages/releaseExample/index",
+      });
+    },
     onChange(score) {
       console.log(score);
       this.score = score;
@@ -119,6 +142,9 @@ export default {
     decreaseScore() {
       this.score2--;
       this.$refs.changeScoreRef.updateScore(this.score2);
+    },
+    onChange3(score) {
+      this.score3 = score;
     },
   },
 };
@@ -153,12 +179,12 @@ export default {
     color: #333;
   }
   .tabs {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	.tab {
-		padding: 20rpx;
-	}
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .tab {
+      padding: 20rpx;
+    }
   }
 }
 </style>
